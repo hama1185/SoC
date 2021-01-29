@@ -166,17 +166,33 @@ sub infection_behavior(neighbors as agtset) {
 			My.Counter = My.Counter+1	//感染期間を数える
 			
 			For Each One in Neighbors	//感染させる
-				If One.Condition == 0 and Rnd() < Universe.Infection_Rate Then
-					If Universe.Incubation_Period <> 0	Then	//潜伏期間が0でないときは潜伏感染者になる
-						One.Condition = 3
-						One.RN = 0			
-						My.RN = My.RN + 1
-					Else										//潜伏期間が0のときはすぐに感染者にする
-//						One.Condittion = 1
-						develop(one)  //発症する
-						One.RN = 0
-						One.Counter = 0
-						My.RN = My.RN + 1
+				If One.action_radius <> Universe.action_radius_group3 Then
+					If One.Condition == 0 and Rnd() < Universe.Infection_Rate Then
+						If Universe.Incubation_Period <> 0	Then	//潜伏期間が0でないときは潜伏感染者になる
+							One.Condition = 3
+							One.RN = 0			
+							My.RN = My.RN + 1
+						Else										//潜伏期間が0のときはすぐに感染者にする
+	//						One.Condittion = 1
+							develop(one)  //発症する
+							One.RN = 0
+							One.Counter = 0
+							My.RN = My.RN + 1
+						End if
+					End if
+				Else //グループCの時
+					If One.Condition == 0 and Rnd() < Universe.Infection_Nonemask_Rate Then
+						If Universe.Incubation_Period <> 0	Then	//潜伏期間が0でないときは潜伏感染者になる
+							One.Condition = 3
+							One.RN = 0			
+							My.RN = My.RN + 1
+						Else										//潜伏期間が0のときはすぐに感染者にする
+	//						One.Condittion = 1
+							develop(one)  //発症する
+							One.RN = 0
+							One.Counter = 0
+							My.RN = My.RN + 1
+						End if
 					End if
 				End if
 			Next One
@@ -189,10 +205,18 @@ sub infection_behavior(neighbors as agtset) {
 		Elseif	My.Condition == 3	Then	//潜伏感染者のとき（感染性のある感染者）
 			My.Counter = My.Counter+1	//感染期間を数える
 			For Each One in Neighbors	//感染させる
-				If One.Condition == 0 and Rnd() < Universe.Infection_Rate Then
-					One.Condition = 3
-					One.RN = 0
-					My.RN = My.RN + 1
+				If One.action_radius <> Universe.action_radius_group3 Then
+					If One.Condition == 0 and Rnd() < Universe.Infection_Rate Then
+						One.Condition = 3
+						One.RN = 0
+						My.RN = My.RN + 1
+					End if
+				Else
+					If One.Condition == 0 and Rnd() < Universe.Infection_Nonemask_Rate Then
+						One.Condition = 3
+						One.RN = 0
+						My.RN = My.RN + 1
+					End if
 				End if
 			Next One
 			If	1/Universe.Incubation_Period > Rnd()	Then	//発症する

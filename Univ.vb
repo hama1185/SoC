@@ -13,11 +13,13 @@ Univ_Init{
 		One.Direction = Rnd()*360
 		One.RN = 0
 		//グループ分けと行動範囲の設定
-		if i / universe.Population < universe.group1_rate then
+		If i / universe.Population < universe.group1_rate Then
 			one.action_radius = universe.action_radius_group1
-		else
+		ElseIf (i - int(universe.Population * universe.group1_rate)) / (universe.Population - int(universe.Population * universe.group1_rate)) < universe.mask_rate Then
 			one.action_radius = universe.action_radius_group2
-		end if
+		Else
+			one.action_radius = universe.action_radius_group3
+		End If
 	Next i
 	MakeAgtset(Walkers, Universe.Field.Walker)
 	RandomPutAgtset(Walkers)
